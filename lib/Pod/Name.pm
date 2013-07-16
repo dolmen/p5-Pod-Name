@@ -94,13 +94,48 @@ Get the title of all the .pm files in the current directory:
 
 =head1 DESCRIPTION
 
+A simple L<POD|perlpod> formatter class that just extracts the content of
+the C<NAME> section as text. L<POD Escapes|Pod::Escapes> and encoding of the
+document are properly expanded contrary to most naive implementations of that
+function.
+
+The API is designed to be used also with L<perldoc> to ease writing of
+one-liners.
+
 =head1 METHODS
 
-The only public method is C<parse_from_file>($FILE, $FHOUT)>.
+=head2 C<Pod::Name-E<gt>extract_name(*FHIN)>
 
-C<$FILE> is a file path.
+C<*FHIN> is a read file handle of a document containing a POD document.
 
-C<$FHOUTPUT> is the output file handle.
+To extract from a POD document stored in a string, you can open a filehandle on
+a reference to that string:
+
+    my $name = do {
+        open my $fh, '<', \$string;
+        Pod::Name->extract_name($fh)
+    };
+
+=head2 C<Pod::Name-E<gt>parse_from_file($FILE, *FHOUT)>
+
+This is the method used by L<perldoc> with C<-M>. This follows
+the C<Pod::Perldoc> formatter (C<Pod::Perldoc::To*> classes) contract.
+
+=over 4
+
+=item *
+
+C<$FILE> is a file path of a POD document.
+
+=item *
+
+C<*FHOUT> is the output file handle.
+
+=back
+
+=head1 AUTHOR
+
+Olivier Mengué, L<mailto:dolmen@cpan.org>.
 
 =head1 COPYRIGHT & LICENSE
 
